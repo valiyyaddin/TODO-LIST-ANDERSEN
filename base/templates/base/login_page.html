@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="login-form" onsubmit="return login(event)">
+    <label>Username: <input type="text" id="username" required /></label><br />
+    <label>Password: <input type="password" id="password" required /></label><br />
+    <button type="submit">Login</button>
+  </form>
+
+  <script>
+    async function login(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/api/token/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        if (!response.ok) {
+          alert('Login failed: ' + response.status);
+          return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+
+        alert('Login successful! Access token saved.');
+        window.location.href = '/tasks/';;  // Redirect to home/tasks
+      } catch (error) {
+        alert('Network error: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>
