@@ -53,6 +53,9 @@ def login_page(request):
 
 class TaskAPIViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
+
+
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
